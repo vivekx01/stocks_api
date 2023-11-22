@@ -1,2 +1,5 @@
-# stocks_api
-This api provides data on Stocks listed on National Stock Exchange (NSE) - India as well as data on stocks listed on American Stock Exchange
+# Stocks_api
+This api provides data on Indian Stocks / US Stocks 
+
+# Note
+This api is intended for personal use only 
