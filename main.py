@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 import yfinance as yf
 import pandas as pd
-import json
 
 app = FastAPI()
 
@@ -16,7 +15,7 @@ def read_item(stock_name: str,query_param: str =None):
         dividends = latest_dividend_data(stock_name)
         splits = stock_splits(stock_name)
         financials = get_financials(stock_name)
-        print(financials.head())
+        # print(financials)
     except:
         return {"error": "Oops! Something went wrong!"}
 
@@ -25,7 +24,7 @@ def read_item(stock_name: str,query_param: str =None):
             "stock_price":f"{price:.2f}",
             "dividend_data":dividends,
             "stock_splits" : splits,
-            # "financials": financials
+            "financials": financials
             }
 
 #getting stock price
@@ -43,13 +42,23 @@ def get_stock_price(name):
 def latest_dividend_data(name):
     dividends_data = yf.Ticker(name).dividends
     current_year = pd.to_datetime('today').year
-    latest_year_dividends = dividends_data[dividends_data.index.year == current_year]
-    return latest_year_dividends
+    # Get the last 4 years from the current date
+    current_year = pd.to_datetime('today').year
+    last_4_years = range(current_year - 3, current_year + 1)
+
+    # Filter dividends data for the last 4 years
+    latest_4_years_dividends = dividends_data[dividends_data.index.year.isin(last_4_years)]
+
+    return latest_4_years_dividends
+
 
 def stock_splits(name):
     stock_splits = yf.Ticker(name).splits
     return stock_splits
 
 def get_financials(name):
-    financials = yf.Ticker(name).financials
-    return financials
+    financials_data = yf.Ticker(name).financials
+    financials_json = {}
+    for key, value in financials_data.items():
+        financials_json[key] = value.astype(str).to_dict()
+    return financials_json
