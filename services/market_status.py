@@ -8,7 +8,7 @@ import json
 def get_market_status():
     try:
         #getting the current day and time from ntp server
-        ntp_server = 'pool.ntp.org'
+        ntp_server = 'time.windows.com'
         client = ntplib.NTPClient()
         response = client.request(ntp_server, version=3)
         timestamp = response.tx_time
@@ -23,7 +23,7 @@ def get_market_status():
         return {"error":"Oops! Something went wrong! Try again after a few moments"}
     
     # Market is open only Monday to friday 9am to 4pm
-    if current_day in ['Saturday', 'Sunday'] or not ('09:00:00' <= current_time <= '16:00:00'):
+    if current_day in ['Saturday', 'Sunday'] or not ('09:15:00' <= current_time <= '15:30:00'):
         market_status = 'Closed'
     else:
         # Reading the stored json to get market status
