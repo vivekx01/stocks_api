@@ -1,5 +1,18 @@
 import yfinance as yf
 
+def get_price(name):
+    minute = minute_stock_price(name)
+    hourly_change = hourly_stock_price(name)
+    daily_change = daily_stock_price(name)
+    weekly_change = weekly_stock_price(name)
+    return {
+        "stock_name": "name_here",
+        "stock_symbol": name,
+        "price": minute,
+        "hourly_change": hourly_change,
+        "daily_change": daily_change,
+        "weekly_change": weekly_change
+    }
 
 def minute_stock_price(name):
     # Define the symbol and timeframe
@@ -10,7 +23,7 @@ def minute_stock_price(name):
 
     # Get the close price for the most recent minute
     current_minute_close = data['Close'].iloc[-1]
-    return {"stock_name":name,"price":f"{current_minute_close:.2f}"}
+    return f"{current_minute_close:.2f}"
 
 def hourly_stock_price(name):
     # Define the symbol and timeframe
@@ -23,7 +36,7 @@ def hourly_stock_price(name):
     close1 = data['Close'].iloc[-1]
     close2 = data['Close'].iloc[-2]
     percent_change = ((close1 - close2) * 100)/close2
-    return {"stock_name": name, "percent_change": f"{percent_change:.2f}"}
+    return f"{percent_change:.2f}"
 
 def daily_stock_price(name):
     # Define the symbol and timeframe
@@ -36,7 +49,7 @@ def daily_stock_price(name):
     close1 = data['Close'].iloc[-1]
     close2 = data['Close'].iloc[-2]
     percent_change = ((close1 - close2) * 100)/close2
-    return {"stock_name": name, "percent_change": f"{percent_change:.2f}"}
+    return f"{percent_change:.2f}"
 
 def weekly_stock_price(name):
     # Define the symbol and timeframe
@@ -49,4 +62,4 @@ def weekly_stock_price(name):
     close1 = data['Close'].iloc[-1]
     close2 = data['Close'].iloc[-2]
     percent_change = ((close1 - close2) * 100)/close2
-    return {"stock_name": name, "percent_change": f"{percent_change:.2f}"}
+    return f"{percent_change:.2f}"
