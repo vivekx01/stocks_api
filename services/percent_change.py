@@ -1,15 +1,24 @@
 import yfinance as yf
-from utilities.redis_connect import redis_exists,set_redis,setex_redis,get_redis
+from utilities.redis_connect import redis_exists,setex_redis,get_redis,nasdaq_get,nse_get
 
-def get_percent_change(stock_symbol):
+def get_percent_change(stock_symbol,stock_exchange):
     if (redis_exists(stock_symbol+"_percent_change")):
         return get_redis(stock_symbol+"_percent_change")
-    else:
-        minute = minute_stock_price(stock_symbol)
-        hourly_change = hourly_stock_price(stock_symbol)
-        daily_change = daily_stock_price(stock_symbol)
-        weekly_change = weekly_stock_price(stock_symbol)
+    else: 
+        if (stock_exchange=="nse"):
+            stock_name = nse_get(stock_symbol)
+            minute = minute_stock_price(stock_symbol+".ns")
+            hourly_change = hourly_stock_price(stock_symbol+".ns")
+            daily_change = daily_stock_price(stock_symbol+".ns")
+            weekly_change = weekly_stock_price(stock_symbol+".ns")
+        else:
+            stock_name = nasdaq_get(stock_symbol)
+            minute = minute_stock_price(stock_symbol)
+            hourly_change = hourly_stock_price(stock_symbol)
+            daily_change = daily_stock_price(stock_symbol)
+            weekly_change = weekly_stock_price(stock_symbol)
         response = {
+            "stock_name":stock_name,
             "stock_symbol": stock_symbol,
             "price": minute,
             "hourly_change": hourly_change,

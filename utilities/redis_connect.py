@@ -19,3 +19,19 @@ def redis_exists(key):
 def setex_redis(key,ttl,value):
     value_json= json.dumps(value)
     redis.setex(key,ttl,value_json)
+
+def nse_get(key:str):
+    symbol = key.upper()
+    if (redis.hexists('nse_stock_mapping',symbol)):
+        data = redis.hget('nse_stock_mapping',symbol)
+        return data.decode('utf-8')
+    else:
+        return {"error":"The data does not exist on redis!"}
+
+def nasdaq_get(key:str):
+    symbol = key.upper()
+    if (redis.hexists('nasdaq_stock_mapping',symbol)):
+        data = redis.hget('nasdaq_stock_mapping',symbol)
+        return data.decode('utf-8')
+    else:
+        return {"error":"The data does not exist on redis!"}

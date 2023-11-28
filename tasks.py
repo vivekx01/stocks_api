@@ -1,5 +1,5 @@
 from celery import Celery
-from utilities.redis_connect import set_redis
+from utilities.redis_connect import set_redis,nasdaq_get,nse_get
 from services.percent_change import minute_stock_price,hourly_stock_price,weekly_stock_price,daily_stock_price
 
 app = Celery('tasks')
@@ -16,7 +16,7 @@ def get_nifty_data():
     'BRITANNIA', 'WIPRO', 'HCLTECH', 'APOLLOHOSP']
     result={}
     for stock in stocks:
-        result.update({stock:get_price(stock+".ns")})
+        result.update({stock:get_price(stock,"nse")})
     set_redis('nifty_data',result)
 
 @app.task
@@ -35,15 +35,25 @@ def get_nasdaq_data():
     ]
     result={}
     for stock in stocks:
-        result.update({stock:get_price(stock)})
+        result.update({stock:get_price(stock,"nasdaq")})
     set_redis('nasdaq_hundred_data',result)
 
-def get_price(stock_symbol):
-    minute = minute_stock_price(stock_symbol)
-    hourly_change = hourly_stock_price(stock_symbol)
-    daily_change = daily_stock_price(stock_symbol)
-    weekly_change = weekly_stock_price(stock_symbol)
+def get_price(stock_symbol,stock_exchange):
+    if (stock_exchange=="nse"):
+        stock_name = nse_get(stock_symbol)
+        minute = minute_stock_price(stock_symbol+".ns")
+        hourly_change = hourly_stock_price(stock_symbol+".ns")
+        daily_change = daily_stock_price(stock_symbol+".ns")
+        weekly_change = weekly_stock_price(stock_symbol+".ns")
+    else:
+        stock_name = nasdaq_get(stock_symbol)
+        minute = minute_stock_price(stock_symbol)
+        hourly_change = hourly_stock_price(stock_symbol)
+        daily_change = daily_stock_price(stock_symbol)
+        weekly_change = weekly_stock_price(stock_symbol)
+    
     response = {
+        "stock_name": stock_name,
         "stock_symbol": stock_symbol,
         "price": minute,
         "hourly_change": hourly_change,

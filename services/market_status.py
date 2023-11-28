@@ -32,24 +32,25 @@ def get_nse_market_status():
                 if ('09:15:00' <= time_value <= '15:30:00'):
                     response['market_status'] = market_status_data['market_status']
                     return response
-        # Or else do the processing to detect if the market is open or closed
-        symbol = 'RELIANCE.NS' 
-        interval = '1m'
-        data = yf.Ticker(symbol).history(period='1d', interval=interval)
-        previous_minute_close = data['Close'].iloc[-1]
-        time.sleep(5)
-        for _ in range(2):             
+        else:
+            # Or else do the processing to detect if the market is open or closed
+            symbol = 'RELIANCE.NS' 
+            interval = '1m'
             data = yf.Ticker(symbol).history(period='1d', interval=interval)
-            current_minute_close = data['Close'].iloc[-1]
-            #if it is detected that the market is open
-            if current_minute_close != previous_minute_close:
-                response['market_status'] = "Open"
-                set_redis('nse_market_status',response)
-                return response
-            time.sleep(5)
-            previous_minute_close = current_minute_close
-        response['market_status'] = "Closed"
-        set_redis('nse_market_status',response)
+            previous_minute_close = data['Close'].iloc[-1]
+            time.sleep(10)
+            for _ in range(2):             
+                data = yf.Ticker(symbol).history(period='1d', interval=interval)
+                current_minute_close = data['Close'].iloc[-1]
+                #if it is detected that the market is open
+                if current_minute_close != previous_minute_close:
+                    response['market_status'] = "Open"
+                    set_redis('nse_market_status',response)
+                    return response
+                time.sleep(5)
+                previous_minute_close = current_minute_close
+            response['market_status'] = "Closed"
+            set_redis('nse_market_status',response)
     return response
 
 def get_nasdaq_market_status():
@@ -87,7 +88,7 @@ def get_nasdaq_market_status():
         interval = '1m'
         data = yf.Ticker(symbol).history(period='1d', interval=interval)
         previous_minute_close = data['Close'].iloc[-1]
-        time.sleep(5)
+        time.sleep(10)
         for _ in range(2):             
             data = yf.Ticker(symbol).history(period='1d', interval=interval)
             current_minute_close = data['Close'].iloc[-1]
