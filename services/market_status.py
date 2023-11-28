@@ -26,10 +26,12 @@ def get_nse_market_status():
     else:
         if (redis_exists('nse_market_status')):
             market_status_data = get_redis('nse_market_status')
-            date_value = market_status_data['date'] 
+            date_value = market_status_data['date']
+            time_value = market_status_data['time'] 
             if(current_date==date_value):
-                response['market_status'] = market_status_data['market_status']
-                return response
+                if ('09:15:00' <= time_value <= '15:30:00'):
+                    response['market_status'] = market_status_data['market_status']
+                    return response
         # Or else do the processing to detect if the market is open or closed
         symbol = 'RELIANCE.NS' 
         interval = '1m'
@@ -73,11 +75,13 @@ def get_nasdaq_market_status():
         return response
     else:
         if (redis_exists('nasdaq_market_status')):
-            market_status_data = get_redis('nse_market_status')
-            date_value = market_status_data['date'] 
+            market_status_data = get_redis('nasdaq_market_status')
+            date_value = market_status_data['date']
+            time_value = market_status_data['time']  
             if(current_date==date_value):
-                response['market_status'] = market_status_data['market_status']
-                return response
+                if ('09:30:00' <= time_value <= '16:00:00'):
+                    response['market_status'] = market_status_data['market_status']
+                    return response
         # Or else do the processing to detect if the market is open or closed
         symbol = 'AAPL' 
         interval = '1m'

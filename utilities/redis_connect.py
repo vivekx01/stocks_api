@@ -1,6 +1,5 @@
 from redis import Redis
 import json
-from datetime import timedelta
 redis = Redis(host='192.168.0.107', port=6379, db=0)
 
 def get_redis(key):

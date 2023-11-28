@@ -9,5 +9,5 @@ def get_stock_price(stock_symbol):
         return get_redis(stock_symbol+"_price")
     else:
         response = {"stock_symbol": stock_symbol, "stock_price": minute_stock_price(stock_symbol)}
-        setex_redis(stock_symbol+"_price",2,response)
+        setex_redis(stock_symbol+"_price",1,response)
         return response

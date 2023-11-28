@@ -1,5 +1,4 @@
 from kombu import Exchange, Queue
-from celery.schedules import crontab
 from datetime import timedelta
 
 BROKER_URL = "redis://192.168.0.107:6379/0"
@@ -16,8 +15,12 @@ CELERY_QUEUES = (
 
 # Celery Beat Configuration
 CELERYBEAT_SCHEDULE = {
-    'get_stock_stats': {
+    'get_nifty_stocks': {
         'task': 'tasks.get_nifty_data',
-        'schedule': timedelta(seconds=35),  # Adjust the schedule as needed
+        'schedule': timedelta(seconds=45),  # Adjust the schedule as needed
+    },
+    'get_nasdaq_stocks': {
+        'task': 'tasks.get_nasdaq_data',
+        'schedule': timedelta(seconds=90),  # Adjust the schedule as needed
     },
 }

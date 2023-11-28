@@ -3,7 +3,6 @@ from utilities.redis_connect import setex_redis,redis_exists,get_redis
 
 def get_nifty_data():
     if (redis_exists('nifty_data')):
-        print("This")
         return get_redis('nifty_data')
     else:
         stocks = ['CIPLA', 'DIVISLAB', 'ADANIENT', 'HINDALCO', 'JSWSTEEL', 'AXISBANK',
