@@ -17,9 +17,9 @@ def get_nasdaq_data():
         "PDD", "PYPL", "PEP", "QCOM", "REGN", "ROST", "SIRI", "SGEN", "SBUX", "SNPS",
         "TSLA", "TXN", "TMUS", "VRSK", "VRTX", "WBA", "WBD", "WDAY", "XEL", "ZM", "ZS"
         ]
-        result={}
+        result=[]
         for stock in stocks:
-            result.update({stock:get_percent_change(stock)})
+            result.append(get_percent_change(stock))
         setex_redis('nasdaq_hundred_data',30,result)
         return result
 

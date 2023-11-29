@@ -7,4 +7,4 @@ router = APIRouter()
 @router.get("/nse/nifty-fifty/")
 def get_nifty():
     response = get_nifty_data()
-    return response
+    return {"data": response}

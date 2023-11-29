@@ -14,9 +14,9 @@ def get_nifty_data():
     'ULTRACEMCO', 'INDUSINDBK', 'BAJFINANCE', 'COALINDIA', 'TECHM', 'EICHERMOT',
     'TATAMOTORS', 'TATASTEEL', 'NESTLEIND', 'ONGC', 'INFY', 'UPL', 'TCS',
     'BRITANNIA', 'WIPRO', 'HCLTECH', 'APOLLOHOSP']
-    result={}
+    result=[]
     for stock in stocks:
-        result.update({stock:get_price(stock,"nse")})
+        result.append(get_price(stock,"nse"))
     set_redis('nifty_data',result)
 
 @app.task
@@ -33,9 +33,9 @@ def get_nasdaq_data():
         "PDD", "PYPL", "PEP", "QCOM", "REGN", "ROST", "SIRI", "SGEN", "SBUX", "SNPS",
         "TSLA", "TXN", "TMUS", "VRSK", "VRTX", "WBA", "WBD", "WDAY", "XEL", "ZM", "ZS"
     ]
-    result={}
+    result=[]
     for stock in stocks:
-        result.update({stock:get_price(stock,"nasdaq")})
+        result.append(get_price(stock,"nasdaq"))
     set_redis('nasdaq_hundred_data',result)
 
 def get_price(stock_symbol,stock_exchange):

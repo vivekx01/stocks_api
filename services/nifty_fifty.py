@@ -14,8 +14,9 @@ def get_nifty_data():
         'TATAMOTORS', 'TATASTEEL', 'NESTLEIND', 'ONGC', 'INFY', 'UPL', 'TCS',
         'BRITANNIA', 'WIPRO', 'HCLTECH', 'APOLLOHOSP']
         result={}
+        result=[]
         for stock in stocks:
-            result.update({stock:get_percent_change(stock+".ns")})
+            result.append(get_percent_change(stock))
         setex_redis('nifty_data',30,result)
         return result
 
